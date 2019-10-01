@@ -78,10 +78,6 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 		const onChangeContent = (newContent) => {
 			let inner = document.querySelector('pre').innerText;
 			setAttributes({content: inner});
-			// setAttributes(prevState => {
-			// 	console.log(prevState);
-			// 	return { ...prevState.content, ...newContent }
-			// });
 		};
 
 		function onCodeFontColorChange(newColor) {
@@ -98,16 +94,11 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 
 
 		function formatCode() {
-			console.log('props: ', props);
-			console.log('content: ', content);
 			const code = content.toString();
 			const html = Prism.highlight(code, Prism.languages.javascript, 'javascript');
 
 			setAttributes({content: content});
 			setAttributes({formattedContent: html});
-			console.log('code: ', code);
-			console.log('html: ', html);
-			console.log('content: ', content);
 		}
 
 		return (
@@ -146,7 +137,8 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 					className={`${className} language-javascript`}
 					onChange={onChangeContent}
 					value={formattedContent}
-					style={{backgroundColor: codeBackgroundColor}}
+					style={{backgroundColor: codeBackgroundColor, whiteSpace: 'pre-wrap'}}
+					formattingControls={ [] }
 				/>
 
 			</div>
@@ -168,6 +160,6 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 		console.log('save props: ', props);
 
 		return (<pre
-			className={`${props.attributes.className} language-javascript`}>{props.attributes.formattedContent}</pre>);
+			className={`${props.attributes.className} language-javascript line-numbers`}>{props.attributes.formattedContent}</pre>);
 	},
 });
