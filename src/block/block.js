@@ -45,7 +45,7 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 		content: {
 			type: 'string',
 			source: 'text',
-			selector: 'code',
+			selector: 'pre',
 		},
 		formattedContent: {
 			type: 'string',
@@ -168,6 +168,6 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 		console.log('save props: ', props);
 
 		return (<pre
-			className={`${props.attributes.className} language-javascript`}><code>{props.attributes.formattedContent}</code></pre>);
+			className={`${props.attributes.className} language-javascript`}>{props.attributes.formattedContent}</pre>);
 	},
 });
