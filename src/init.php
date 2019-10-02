@@ -85,6 +85,13 @@ function eom_svg_code_snippets_cgb_block_assets() { // phpcs:ignore
 			'render_callback' => 'custom_gutenberg_render_html',
 		)
 	);
+	/**
+	 * Need this function to display the snippet without the accompanying HTML that wraps up styles.
+	 * @param $attributes
+	 * @param $content
+	 *
+	 * @return string
+	 */
 	function custom_gutenberg_render_html( $attributes, $content ) {
 		return html_entity_decode($content);
 	}

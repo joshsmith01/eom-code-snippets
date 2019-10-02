@@ -11,10 +11,10 @@ import './style.scss';
 // Import from NPM
 import Prism from 'prismjs';
 
-const {__} = wp.i18n; // Import __() from wp.i18n
-const {registerBlockType} = wp.blocks; // Import registerBlockType() from wp.blocks
-const {RichText, PlainText, InspectorControls, ColorPalette} = wp.editor;
-const {PanelBody, SelectControl, Button} = wp.components;
+const { __ } = wp.i18n; // Import __() from wp.i18n
+const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
+const { RichText, PlainText, Verse, InspectorControls, ColorPalette } = wp.editor;
+const { PanelBody, SelectControl, Button } = wp.components;
 
 /**
  * Register: aa Gutenberg Block.
@@ -29,17 +29,17 @@ const {PanelBody, SelectControl, Button} = wp.components;
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType('cgb/block-eom-svg-code-snippets', {
+registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __('SVG Code Snippets'), // Block title.
+	title: __( 'SVG Code Snippets' ), // Block title.
 	icon: 'media-code', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting,
 	keywords: [
-		__('eom-svg-code-snippets'),
-		__('eom-svg-code-snippets'),
-		__('eom-svg-code-snippets'),
-		__('EOM'),
-		__('create-guten-block'),
+		__( 'eom-svg-code-snippets' ),
+		__( 'eom-svg-code-snippets' ),
+		__( 'eom-svg-code-snippets' ),
+		__( 'EOM' ),
+		__( 'create-guten-block' ),
 	],
 	attributes: {
 		content: {
@@ -59,7 +59,7 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 		},
 		codeLanguage: {
 			type: 'string',
-		}
+		},
 	},
 
 	/**
@@ -73,60 +73,57 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 	 * @param {Object} props Props.
 	 * @returns {Mixed} JSX Component.
 	 */
-	edit: (props) => {
-		const {attributes: {content, codeBackgroundColor, codeFontColor, formattedContent, codeLanguage}, setAttributes, className} = props;
-		const onChangeContent = (newContent) => {
-			let inner = document.querySelector('pre').innerText;
-			setAttributes({content: inner});
+	edit: ( props ) => {
+		const { attributes: { content, codeBackgroundColor, codeFontColor, formattedContent, codeLanguage }, setAttributes, className } = props;
+		const onChangeContent = ( newContent ) => {
+			const inner = document.querySelector( 'pre' ).innerText;
+			setAttributes( { content: inner } );
 		};
 
-		function onCodeFontColorChange(newColor) {
-			setAttributes({codeFontColor: newColor})
+		function onCodeFontColorChange( newColor ) {
+			setAttributes( { codeFontColor: newColor } );
 		}
 
-		function onCodeBackgroundColorChange(newColor) {
-			setAttributes({codeBackgroundColor: newColor})
+		function onCodeBackgroundColorChange( newColor ) {
+			setAttributes( { codeBackgroundColor: newColor } );
 		}
 
-		function onCodeLanguageChange(newLanguage) {
-			setAttributes({codeLanguage: newLanguage});
+		function onCodeLanguageChange( newLanguage ) {
+			setAttributes( { codeLanguage: newLanguage } );
 		}
-
 
 		function formatCode() {
 			const code = content.toString();
-			const html = Prism.highlight(code, Prism.languages.javascript, 'javascript');
+			const html = Prism.highlight( code, Prism.languages.javascript, 'javascript' );
 
-			setAttributes({content: content});
-			setAttributes({formattedContent: html});
+			setAttributes( { content: content } );
+			setAttributes( { formattedContent: html } );
 		}
 
 		return (
 			<div>
-				<InspectorControls style={{marginBottom: '40px'}}>
-					<PanelBody title={'Code Background Color'}>
+				<InspectorControls style={ { marginBottom: '40px' } }>
+					<PanelBody title={ 'Code Background Color' }>
 						<p>Select a background color:</p>
-						<ColorPalette value={codeBackgroundColor}
-									  onChange={onCodeBackgroundColorChange}/>
+						<ColorPalette value={ codeBackgroundColor } onChange={ onCodeBackgroundColorChange } />
 						<p>Select a font color:</p>
-						<ColorPalette value={codeFontColor}
-									  onChange={onCodeFontColorChange}/>
+						<ColorPalette value={ codeFontColor } onChange={ onCodeFontColorChange } />
 
 					</PanelBody>
-					<PanelBody title={'Language'}>
+					<PanelBody title={ 'Language' }>
 						<SelectControl
-							multiple={false}
-							label={__('Select a language:')}
-							value={codeLanguage} // e.g: value = [ 'a', 'c' ]
-							onChange={onCodeLanguageChange}
-							options={[
-								{value: null, label: 'Select a Language', disabled: true},
-								{value: 'a', label: 'Language A'},
-								{value: 'b', label: 'Language B'},
-								{value: 'c', label: 'Language C'},
-							]}
+							multiple={ false }
+							label={ __( 'Select a language:' ) }
+							value={ codeLanguage } // e.g: value = [ 'a', 'c' ]
+							onChange={ onCodeLanguageChange }
+							options={ [
+								{ value: null, label: 'Select a Language', disabled: true },
+								{ value: 'a', label: 'Language A' },
+								{ value: 'b', label: 'Language B' },
+								{ value: 'c', label: 'Language C' },
+							] }
 						/>
-						<Button isDefault onClick={formatCode}>
+						<Button isDefault onClick={ formatCode }>
 							Format Code
 						</Button>
 					</PanelBody>
@@ -134,10 +131,10 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 
 				<RichText
 					tagName="pre"
-					className={`${className} language-javascript`}
-					onChange={onChangeContent}
-					value={formattedContent}
-					style={{backgroundColor: codeBackgroundColor, whiteSpace: 'pre-wrap'}}
+					className={ `${ className } language-javascript` }
+					onChange={ onChangeContent }
+					value={ formattedContent }
+					style={ { backgroundColor: codeBackgroundColor, whiteSpace: 'pre-wrap' } }
 					formattingControls={ [] }
 				/>
 
@@ -156,10 +153,8 @@ registerBlockType('cgb/block-eom-svg-code-snippets', {
 	 * @param {Object} props Props.
 	 * @returns {Mixed} JSX Frontend HTML.
 	 */
-	save: (props) => {
-		console.log('save props: ', props);
-
-		return (<pre
-			className={`${props.attributes.className} language-javascript line-numbers`}>{props.attributes.formattedContent}</pre>);
+	save: ( props ) => {
+		return ( <pre
+			className={ `${ props.attributes.className } language-javascript line-numbers` }>{ props.attributes.formattedContent }</pre> );
 	},
-});
+} );
