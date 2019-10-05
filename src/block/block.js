@@ -10,11 +10,14 @@ import './editor.scss';
 import './style.scss';
 // Import from NPM
 import Prism from 'prismjs';
+import 'prismjs/plugins/keep-markup/prism-keep-markup.js';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
+import { languages } from '../utils/languages';
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { RichText, PlainText, Verse, InspectorControls, ColorPalette } = wp.editor;
-const { PanelBody, SelectControl, Button } = wp.components;
+const { RichText, PlainText, InspectorControls, ColorPalette, BlockControls } = wp.editor;
+const { PanelBody, SelectControl, Button, ToggleControl, SandBox } = wp.components;
 
 /**
  * Register: aa Gutenberg Block.
@@ -44,12 +47,18 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	attributes: {
 		content: {
 			type: 'string',
-			source: 'text',
+			source: 'attribute',
 			selector: 'pre',
+			attribute: 'content',
 		},
 		formattedContent: {
 			type: 'string',
 			source: 'text',
+			selector: 'pre',
+		},
+		lineNumbers: {
+			type: 'boolean',
+			default: false,
 		},
 		codeFontColor: {
 			type: 'string',
@@ -59,6 +68,11 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 		},
 		codeLanguage: {
 			type: 'string',
+			default: 'javascript',
+		},
+		isPreview: {
+			type: 'boolean',
+			default: false,
 		},
 	},
 
@@ -74,10 +88,9 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { content, codeBackgroundColor, codeFontColor, formattedContent, codeLanguage }, setAttributes, className } = props;
+		const { attributes: { content, codeBackgroundColor, codeFontColor, formattedContent, lineNumbers, codeLanguage, isPreview }, setAttributes, className } = props;
 		const onChangeContent = ( newContent ) => {
-			const inner = document.querySelector( 'pre' ).innerText;
-			setAttributes( { content: inner } );
+			setAttributes( { content: newContent } );
 		};
 
 		function onCodeFontColorChange( newColor ) {
@@ -93,21 +106,48 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 		}
 
 		function formatCode() {
-			const code = content.toString();
-			const html = Prism.highlight( code, Prism.languages.javascript, 'javascript' );
+			const html = Prism.highlight( content, Prism.languages[codeLanguage], codeLanguage );
+			const htmlString = `<pre class="language-${ codeLanguage }" style="color: red; "><code>${ html }</code></pre>`;
+			setAttributes( { formattedContent: htmlString } );
+			setAttributes( { isPreview: true } );
+		}
 
-			setAttributes( { content: content } );
-			setAttributes( { formattedContent: html } );
+		function toggleLineNumbers() {
+			setAttributes( { lineNumbers: ! lineNumbers } );
+		}
+
+		function switchToPreview() {
+			setAttributes( { isPreview: true } );
+		}
+
+		function switchToHTML() {
+			setAttributes( { isPreview: false } );
 		}
 
 		return (
 			<div>
+				<BlockControls>
+					<div className="components-toolbar">
+						<button
+							className={ `components-tab-button ${ ! isPreview ? 'is-active' : '' }` }
+							onClick={ switchToHTML }
+						>
+							<span>HTML</span>
+						</button>
+						<button
+							className={ `components-tab-button ${ isPreview ? 'is-active' : '' }` }
+							onClick={ switchToPreview }
+						>
+							<span>{ __( 'Preview' ) }</span>
+						</button>
+					</div>
+				</BlockControls>
 				<InspectorControls style={ { marginBottom: '40px' } }>
 					<PanelBody title={ 'Code Background Color' }>
 						<p>Select a background color:</p>
-						<ColorPalette value={ codeBackgroundColor } onChange={ onCodeBackgroundColorChange } />
+						<ColorPalette value={ codeBackgroundColor } onChange={ onCodeBackgroundColorChange }/>
 						<p>Select a font color:</p>
-						<ColorPalette value={ codeFontColor } onChange={ onCodeFontColorChange } />
+						<ColorPalette value={ codeFontColor } onChange={ onCodeFontColorChange }/>
 
 					</PanelBody>
 					<PanelBody title={ 'Language' }>
@@ -116,27 +156,33 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 							label={ __( 'Select a language:' ) }
 							value={ codeLanguage } // e.g: value = [ 'a', 'c' ]
 							onChange={ onCodeLanguageChange }
-							options={ [
-								{ value: null, label: 'Select a Language', disabled: true },
-								{ value: 'a', label: 'Language A' },
-								{ value: 'b', label: 'Language B' },
-								{ value: 'c', label: 'Language C' },
-							] }
+							options={ languages }
 						/>
 						<Button isDefault onClick={ formatCode }>
 							Format Code
 						</Button>
 					</PanelBody>
+					<PanelBody title={ lineNumbers ? 'Hiding Line Numbers' : 'Showing Line Numbers' }>
+						<ToggleControl
+							label={ __( 'Show/Hide Line Numbers', 'eom-svg-code-snippets' ) }
+							checked={ ! lineNumbers }
+							onChange={ toggleLineNumbers }
+						/>
+					</PanelBody>
 				</InspectorControls>
 
-				<RichText
-					tagName="pre"
-					className={ `${ className } language-javascript` }
-					onChange={ onChangeContent }
-					value={ formattedContent }
-					style={ { backgroundColor: codeBackgroundColor, whiteSpace: 'pre-wrap' } }
-					formattingControls={ [] }
-				/>
+				{
+					( isPreview ) ? (
+						<SandBox className={ `${ className } language-${ codeLanguage }` } html={ formattedContent }/>
+					) : (
+						<PlainText
+							value={ content }
+							onChange={ onChangeContent }
+							placeholder={ __( 'Write HTML…' ) }
+							aria-label={ __( 'HTML' ) }
+							className={ 'plain-text' }
+						/>
+					) }
 
 			</div>
 		);
@@ -154,7 +200,10 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 * @returns {Mixed} JSX Frontend HTML.
 	 */
 	save: ( props ) => {
-		return ( <pre
-			className={ `${ props.attributes.className } language-javascript line-numbers` }>{ props.attributes.formattedContent }</pre> );
+		let cls = ( props.attributes.codeLanguage ) ? 'language-' + props.attributes.codeLanguage : '';
+		cls = ( props.attributes.className ) ? cls + props.attributes.className : cls;
+		cls = ( ! props.attributes.lineNumbers ) ? cls + ' line-numbers' : cls;
+		return (
+			<pre className={ cls } content={ props.attributes.content }>{ props.attributes.formattedContent }</pre> );
 	},
 } );
