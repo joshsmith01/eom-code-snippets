@@ -18,7 +18,7 @@ const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 const { RichText, PlainText, InspectorControls, ColorPalette, BlockControls } = wp.editor;
 const { PanelBody, SelectControl, Button, ToggleControl, SandBox } = wp.components;
-
+const style = 'color: red;';
 /**
  * Register: aa Gutenberg Block.
  *
@@ -106,9 +106,8 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 		}
 
 		function formatCode() {
-			const html = Prism.highlight( content, Prism.languages[codeLanguage], codeLanguage );
-			const htmlString = `<pre class="language-${ codeLanguage }" style="color: red; "><code>${ html }</code></pre>`;
-			setAttributes( { formattedContent: htmlString } );
+			const html = Prism.highlight( content, Prism.languages[ codeLanguage ], codeLanguage );
+			setAttributes( { formattedContent: html } );
 			setAttributes( { isPreview: true } );
 		}
 
@@ -145,9 +144,9 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 				<InspectorControls style={ { marginBottom: '40px' } }>
 					<PanelBody title={ 'Code Background Color' }>
 						<p>Select a background color:</p>
-						<ColorPalette value={ codeBackgroundColor } onChange={ onCodeBackgroundColorChange }/>
+						<ColorPalette value={ codeBackgroundColor } onChange={ onCodeBackgroundColorChange } />
 						<p>Select a font color:</p>
-						<ColorPalette value={ codeFontColor } onChange={ onCodeFontColorChange }/>
+						<ColorPalette value={ codeFontColor } onChange={ onCodeFontColorChange } />
 
 					</PanelBody>
 					<PanelBody title={ 'Language' }>
@@ -173,7 +172,8 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 
 				{
 					( isPreview ) ? (
-						<SandBox className={ `${ className } language-${ codeLanguage }` } html={ formattedContent }/>
+						<pre className={ `${ className } language-${ codeLanguage }` }
+							 dangerouslySetInnerHTML={ { __html: formattedContent } } />
 					) : (
 						<PlainText
 							value={ content }
