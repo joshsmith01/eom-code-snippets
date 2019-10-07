@@ -16,9 +16,8 @@ import { languages } from '../utils/languages';
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { RichText, PlainText, InspectorControls, ColorPalette, BlockControls } = wp.editor;
-const { PanelBody, SelectControl, Button, ToggleControl, SandBox } = wp.components;
-const style = 'color: red;';
+const { PlainText, InspectorControls, ColorPalette, BlockControls } = wp.editor;
+const { PanelBody, SelectControl, Button, ToggleControl } = wp.components;
 /**
  * Register: aa Gutenberg Block.
  *
@@ -89,6 +88,9 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 */
 	edit: ( props ) => {
 		const { attributes: { content, codeBackgroundColor, codeFontColor, formattedContent, lineNumbers, codeLanguage, isPreview }, setAttributes, className } = props;
+		let cls = ( codeLanguage ) ? `language-${ codeLanguage } ` : '';
+		cls = ( className ) ? cls + className : cls;
+		cls = ( ! lineNumbers ) ? `${ cls } line-numbers` : cls;
 		const onChangeContent = ( newContent ) => {
 			setAttributes( { content: newContent } );
 		};
@@ -172,7 +174,7 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 
 				{
 					( isPreview ) ? (
-						<pre className={ `${ className } language-${ codeLanguage }` }
+						<pre className={ `${ cls }` }
 							 dangerouslySetInnerHTML={ { __html: formattedContent } } />
 					) : (
 						<PlainText
@@ -200,10 +202,11 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 * @returns {Mixed} JSX Frontend HTML.
 	 */
 	save: ( props ) => {
-		let cls = ( props.attributes.codeLanguage ) ? 'language-' + props.attributes.codeLanguage : '';
-		cls = ( props.attributes.className ) ? cls + props.attributes.className : cls;
-		cls = ( ! props.attributes.lineNumbers ) ? cls + ' line-numbers' : cls;
+		const { attributes: { content, formattedContent, lineNumbers, codeLanguage }, className } = props;
+		let cls = ( codeLanguage ) ? 'language-' + codeLanguage : '';
+		cls = ( className ) ? cls + className : cls;
+		cls = ( ! lineNumbers ) ? cls + ' line-numbers' : cls;
 		return (
-			<pre className={ cls } content={ props.attributes.content }>{ props.attributes.formattedContent }</pre> );
+			<pre className={ cls } content={ content }>{ formattedContent }</pre> );
 	},
 } );
