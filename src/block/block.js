@@ -174,8 +174,7 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 
 				{
 					( isPreview ) ? (
-						<pre className={ `${ cls }` }
-							 dangerouslySetInnerHTML={ { __html: formattedContent } } />
+						<pre className={ `${ cls }` } dangerouslySetInnerHTML={ { __html: formattedContent } } />
 					) : (
 						<PlainText
 							value={ content }
@@ -210,3 +209,4 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 			<pre className={ cls } content={ content }>{ formattedContent }</pre> );
 	},
 } );
+

@@ -4,16 +4,16 @@
  * CSS for both Frontend+Backend.
  */
 
-.wp-block-cgb-block-eom-svg-code-snippets  {
-  //background: $red;
-  border: 0.2rem solid $black;
-  //color: $black;
-  margin: 0 auto;
-  max-width: 740px;
-  padding: 2rem;
+.wp-block-cgb-block-eom-svg-code-snippets {
+	//background: $red;
+	border: 0.2rem solid $black;
+	//color: $black;
+	margin: 0 auto;
+	padding: 2rem;
 	font-size: 1em;
 	display: block;
 }
+
 /**
  * prism.js default theme for JavaScript, CSS and HTML
  * Based on dabblet (http://dabblet.com)
@@ -146,6 +146,7 @@ pre[class*="language-"] {
 .token.bold {
 	font-weight: bold;
 }
+
 .token.italic {
 	font-style: italic;
 }
