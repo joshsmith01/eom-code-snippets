@@ -193,7 +193,7 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 				{
 					( isPreview ) ? (
 						<div className="snippet-container">
-							<div className="window-container">
+							<div className={ `window-container--${ operatingSystem }` }>
 								<Toolbar operatingSystem={ operatingSystem } />
 								<pre className={ `${ cls }` } dangerouslySetInnerHTML={ { __html: formattedContent } }
 									style={ { background: codeBackgroundColor } } />
@@ -231,7 +231,7 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 		cls = ( ! lineNumbers ) ? cls + ' line-numbers' : cls;
 		return (
 			<div className="snippet-container">
-				<div className="window-container">
+				<div className={ `window-container--${ operatingSystem }` }>
 					<Toolbar operatingSystem={ operatingSystem } />
 					<pre className={ cls } content={ content }
 						style={ { background: codeBackgroundColor } }>{ formattedContent }</pre>
