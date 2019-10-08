@@ -13,10 +13,8 @@ import Prism from 'prismjs';
 import 'prismjs/plugins/keep-markup/prism-keep-markup.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import { languages } from '../utils/languages';
-
 // Import components
-import TerminalWindow from './components/Terminal'
-import CommandPrompt from './components/CommandPrompt'
+import Toolbar from './components/Toolbar'
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
@@ -73,6 +71,10 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 			type: 'string',
 			default: 'javascript',
 		},
+		operatingSystem: {
+			type: 'string',
+			default: 'macos',
+		},
 		isPreview: {
 			type: 'boolean',
 			default: false,
@@ -91,17 +93,13 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { content, codeBackgroundColor, codeFontColor, formattedContent, lineNumbers, codeLanguage, isPreview }, setAttributes, className } = props;
+		const { attributes: { content, codeBackgroundColor, operatingSystem, formattedContent, lineNumbers, codeLanguage, isPreview }, setAttributes, className } = props;
 		let cls = ( codeLanguage ) ? `language-${ codeLanguage } ` : '';
 		cls = ( className ) ? cls + className : cls;
 		cls = ( ! lineNumbers ) ? `${ cls } line-numbers` : cls;
 		const onChangeContent = ( newContent ) => {
 			setAttributes( { content: newContent } );
 		};
-
-		function onCodeFontColorChange( newColor ) {
-			setAttributes( { codeFontColor: newColor } );
-		}
 
 		function onCodeBackgroundColorChange( newColor ) {
 			setAttributes( { codeBackgroundColor: newColor } );
@@ -110,6 +108,10 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 		function onCodeLanguageChange( newLanguage ) {
 			setAttributes( { codeLanguage: newLanguage } );
 			formatCode();
+		}
+
+		function onOperatingSystemChange( newOperatingSystem ) {
+			setAttributes( { operatingSystem: newOperatingSystem } );
 		}
 
 		function formatCode() {
@@ -152,8 +154,6 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 					<PanelBody title={ 'Code Background Color' }>
 						<p>Select a background color:</p>
 						<ColorPalette value={ codeBackgroundColor } onChange={ onCodeBackgroundColorChange } />
-						<p>Select a font color:</p>
-						<ColorPalette value={ codeFontColor } onChange={ onCodeFontColorChange } />
 
 					</PanelBody>
 					<PanelBody title={ 'Language' }>
@@ -168,6 +168,19 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 							Format Code
 						</Button>
 					</PanelBody>
+					<PanelBody title={ 'Toolbar' }>
+						<SelectControl
+							multiple={ false }
+							label={ __( 'Select an OS Toolbar:' ) }
+							value={ operatingSystem }
+							onChange={ onOperatingSystemChange }
+							options={ [
+								{ value: 'userDecided', label: 'User\'s System' },
+								{ value: 'none', label: 'No toolbar' },
+								{ value: 'macos', label: 'MacOS' },
+								{ value: 'windows10', label: 'Windows 10' } ] }
+						/>
+					</PanelBody>
 					<PanelBody title={ lineNumbers ? 'Hiding Line Numbers' : 'Showing Line Numbers' }>
 						<ToggleControl
 							label={ __( 'Show/Hide Line Numbers', 'eom-svg-code-snippets' ) }
@@ -181,12 +194,9 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 					( isPreview ) ? (
 						<div className="snippet-container">
 							<div className="window-container">
-							<div className="fakeMenu">
-								<div className="fakeButtons fakeClose" />
-								<div className="fakeButtons fakeMinimize" />
-								<div className="fakeButtons fakeZoom" />
-							</div>
-							<pre className={ `${ cls }` } dangerouslySetInnerHTML={ { __html: formattedContent } } style={ { background: codeBackgroundColor } } />
+								<Toolbar operatingSystem={ operatingSystem } />
+								<pre className={ `${ cls }` } dangerouslySetInnerHTML={ { __html: formattedContent } }
+									style={ { background: codeBackgroundColor } } />
 							</div>
 						</div>
 					) : (
@@ -215,16 +225,16 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 * @returns {Mixed} JSX Frontend HTML.
 	 */
 	save: ( props ) => {
-		const { attributes: { content, formattedContent, lineNumbers, codeLanguage, codeBackgroundColor }, className } = props;
+		const { attributes: { content, operatingSystem, formattedContent, lineNumbers, codeLanguage, codeBackgroundColor }, className } = props;
 		let cls = ( codeLanguage ) ? 'language-' + codeLanguage : '';
 		cls = ( className ) ? cls + className : cls;
 		cls = ( ! lineNumbers ) ? cls + ' line-numbers' : cls;
 		return (
 			<div className="snippet-container">
 				<div className="window-container">
-				<CommandPrompt />
-				<TerminalWindow />
-				<pre className={ cls } content={ content } style={ { background: codeBackgroundColor } }>{ formattedContent }</pre>
+					<Toolbar operatingSystem={ operatingSystem } />
+					<pre className={ cls } content={ content }
+						style={ { background: codeBackgroundColor } }>{ formattedContent }</pre>
 				</div>
 			</div>
 		);
