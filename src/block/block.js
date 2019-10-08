@@ -14,6 +14,9 @@ import 'prismjs/plugins/keep-markup/prism-keep-markup.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import { languages } from '../utils/languages';
 
+// Import components
+import TerminalWindow from './components/Terminal'
+
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
 const { PlainText, InspectorControls, ColorPalette, BlockControls } = wp.editor;
@@ -105,6 +108,7 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 
 		function onCodeLanguageChange( newLanguage ) {
 			setAttributes( { codeLanguage: newLanguage } );
+			formatCode();
 		}
 
 		function formatCode() {
@@ -174,7 +178,14 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 
 				{
 					( isPreview ) ? (
-						<pre className={ `${ cls }` } dangerouslySetInnerHTML={ { __html: formattedContent } } />
+						<div className="snippet-container">
+							<div className="fakeMenu">
+								<div className="fakeButtons fakeClose" />
+								<div className="fakeButtons fakeMinimize" />
+								<div className="fakeButtons fakeZoom" />
+							</div>
+							<pre className={ `${ cls }` } dangerouslySetInnerHTML={ { __html: formattedContent } } style={ { background: codeBackgroundColor } } />
+						</div>
 					) : (
 						<PlainText
 							value={ content }
@@ -201,12 +212,16 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 * @returns {Mixed} JSX Frontend HTML.
 	 */
 	save: ( props ) => {
-		const { attributes: { content, formattedContent, lineNumbers, codeLanguage }, className } = props;
+		const { attributes: { content, formattedContent, lineNumbers, codeLanguage, codeBackgroundColor }, className } = props;
 		let cls = ( codeLanguage ) ? 'language-' + codeLanguage : '';
 		cls = ( className ) ? cls + className : cls;
 		cls = ( ! lineNumbers ) ? cls + ' line-numbers' : cls;
 		return (
-			<pre className={ cls } content={ content }>{ formattedContent }</pre> );
+			<div className="snippet-container">
+				<TerminalWindow />
+				<pre className={ cls } content={ content } style={ { background: codeBackgroundColor } }>{ formattedContent }</pre>
+			</div>
+		);
 	},
 } );
 
