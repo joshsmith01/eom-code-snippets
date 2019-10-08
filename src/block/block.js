@@ -16,6 +16,7 @@ import { languages } from '../utils/languages';
 
 // Import components
 import TerminalWindow from './components/Terminal'
+import CommandPrompt from './components/CommandPrompt'
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
@@ -179,12 +180,14 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 				{
 					( isPreview ) ? (
 						<div className="snippet-container">
+							<div className="window-container">
 							<div className="fakeMenu">
 								<div className="fakeButtons fakeClose" />
 								<div className="fakeButtons fakeMinimize" />
 								<div className="fakeButtons fakeZoom" />
 							</div>
 							<pre className={ `${ cls }` } dangerouslySetInnerHTML={ { __html: formattedContent } } style={ { background: codeBackgroundColor } } />
+							</div>
 						</div>
 					) : (
 						<PlainText
@@ -218,8 +221,11 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 		cls = ( ! lineNumbers ) ? cls + ' line-numbers' : cls;
 		return (
 			<div className="snippet-container">
+				<div className="window-container">
+				<CommandPrompt />
 				<TerminalWindow />
 				<pre className={ cls } content={ content } style={ { background: codeBackgroundColor } }>{ formattedContent }</pre>
+				</div>
 			</div>
 		);
 	},

@@ -45,7 +45,6 @@ pre[class*="language-"] {
 	word-break: normal;
 	word-wrap: normal;
 	line-height: 1.5;
-
 	-moz-tab-size: 4;
 	-o-tab-size: 4;
 	tab-size: 4;
@@ -167,42 +166,47 @@ pre[class*="language-"] {
 }
 
 
+
+// Window with toolbar
+.window-container {
+	box-shadow: #cacaca 1px 1px 6px 0px;
+	border-radius: 5px;
+}
 // Menu bar
-
-
 .fakeButtons {
-	height: 10px;
-	width: 10px;
+	height: 11px;
+	width: 11px;
 	border-radius: 50%;
 	border: 1px solid #000;
 	position: relative;
 	top: -8px;
 	left: 6px;
 	background-color: #ff3b47;
-	border-color: #9d252b;
+	border-color: #8f2422;
 	display: inline-block;
 }
 
 .fakeMinimize {
 	left: 11px;
 	background-color: #ffc100;
-	border-color: #9d802c;
+	border-color: #765a2b;
 }
 
 .fakeZoom {
 	left: 16px;
 	background-color: #00d742;
-	border-color: #049931;
+	border-color: #046b2c;
 }
 
 .fakeMenu {
 	width: 100%;
 	box-sizing: border-box;
 	height: 25px;
-	background-color: #bbb;
+	background-color: #3b3b3e;
 	margin: 0 auto;
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
+
 }
 
 .fakeScreen {
@@ -213,4 +217,55 @@ pre[class*="language-"] {
 	padding: 20px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+}
+
+
+// Command Prompt
+.ui-titlebar {
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+	height: 32px;
+	background: #0072c6;
+	user-select: none;
+	cursor: default;
+}
+.ui-titleicon {
+	flex-grow: 1;
+	max-width: 32px;
+	max-height: 32px;
+}
+.ui-titletext {
+	flex-grow: 2;
+	max-height: 32px;
+	width: auto;
+	font: 12px/32px "Segoe UI", Arial, sans-serif;
+	color: #fff;
+	text-indent: 10px;
+}
+.ui-titlecontrols {
+	max-width: 144px;
+	max-height: 32px;
+	flex-grow: 1;
+	display: flex;
+}
+.ui-btn {
+	margin: 0;
+	width: 48px;
+	height:32px;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.ui-btn svg path,
+.ui-btn svg rect,
+.ui-btn svg polygon {
+	fill: #fff;
+}
+.ui-btn svg {
+	width: 10px;
+	height: 10px;
 }
