@@ -1,3 +1,5 @@
+A WordPress Gutenberg block to add colorful code snippets to your website.
+
 Add syntax highlighting to your code snippets with Code Snippets. Add your snippet to the input area and then select the language with which you'd like the snippet to be highlighted. 
 You can also choose to display the snippet with a console by adding a Windows or Mac style toolbar. 
  
