@@ -1,4 +1,7 @@
-This project was bootstrapped with [Create Guten Block](https://github.com/ahmadawais/create-guten-block).
+Add syntax highlighting to your code snippets with Code Snippets. Add your snippet to the input area and then select the language with which you'd like the snippet to be highlighted. 
+You can also choose to display the snippet with a console by adding a Windows or Mac style toolbar. 
+ 
+---
 
 Below you will find some information on how to run scripts.
 
@@ -19,3 +22,4 @@ Below you will find some information on how to run scripts.
 - You don't normally have to `eject` a project because by ejecting you lose the connection with `create-guten-block` and from there onwards you have to update and maintain all the dependencies on your own.
 
 ---
+This project was bootstrapped with [Create Guten Block](https://github.com/ahmadawais/create-guten-block).

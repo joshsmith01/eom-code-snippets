@@ -75,7 +75,7 @@ function eom_svg_code_snippets_cgb_block_assets() { // phpcs:ignore
 	 * @since 1.16.0
 	 */
 	register_block_type(
-		'cgb/block-eom-svg-code-snippets', array(
+		'cgb/block-eom-code-snippets', array(
 			// Enqueue blocks.style.build.css on both frontend & backend.
 			'style'         => 'eom_svg_code_snippets-cgb-style-css',
 			// Enqueue blocks.build.js in the editor only.

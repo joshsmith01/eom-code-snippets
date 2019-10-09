@@ -1,5 +1,5 @@
 /**
- * BLOCK: eom-svg-code-snippets
+ * BLOCK: eom-code-snippets
  *
  * Registering a basic block with Gutenberg.
  * Simple block, renders and saves the same content without any interactivity.
@@ -31,15 +31,15 @@ const { PanelBody, SelectControl, Button, ToggleControl } = wp.components
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'cgb/block-eom-svg-code-snippets', {
+registerBlockType( 'cgb/block-eom-code-snippets', {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
 	title: __( 'SVG Code Snippets' ), // Block title.
 	icon: 'media-code', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting,
 	keywords: [
-		__( 'eom-svg-code-snippets' ),
-		__( 'eom-svg-code-snippets' ),
-		__( 'eom-svg-code-snippets' ),
+		__( 'eom-code-snippets' ),
+		__( 'eom-code-snippets' ),
+		__( 'eom-code-snippets' ),
 		__( 'EOM' ),
 		__( 'create-guten-block' ),
 	],
