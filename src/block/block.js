@@ -6,20 +6,18 @@
  */
 
 //  Import CSS.
-import './editor.scss';
-import './style.scss';
+import './editor.scss'
+import './style.scss'
 // Import from NPM
-import Prism from 'prismjs';
-import 'prismjs/plugins/keep-markup/prism-keep-markup.js';
-import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
-import { languages } from '../utils/languages';
+import Prism from 'prismjs'
+import { languages } from '../utils/languages'
 // Import components
 import Toolbar from './components/Toolbar'
 
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
-const { PlainText, InspectorControls, ColorPalette, BlockControls } = wp.editor;
-const { PanelBody, SelectControl, Button, ToggleControl } = wp.components;
+const { __ } = wp.i18n // Import __() from wp.i18n
+const { registerBlockType } = wp.blocks // Import registerBlockType() from wp.blocks
+const { PlainText, InspectorControls, ColorPalette, BlockControls } = wp.editor
+const { PanelBody, SelectControl, Button, ToggleControl } = wp.components
 /**
  * Register: aa Gutenberg Block.
  *
@@ -57,10 +55,6 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 			source: 'text',
 			selector: 'pre',
 		},
-		lineNumbers: {
-			type: 'boolean',
-			default: false,
-		},
 		codeFontColor: {
 			type: 'string',
 		},
@@ -93,43 +87,52 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 * @returns {Mixed} JSX Component.
 	 */
 	edit: ( props ) => {
-		const { attributes: { content, codeBackgroundColor, operatingSystem, formattedContent, lineNumbers, codeLanguage, isPreview }, setAttributes, className } = props;
-		let cls = ( codeLanguage ) ? `language-${ codeLanguage } ` : '';
-		cls = ( className ) ? cls + className : cls;
-		cls = ( ! lineNumbers ) ? `${ cls } line-numbers` : cls;
+		const { attributes: { content, codeBackgroundColor, operatingSystem, formattedContent, codeLanguage, isPreview }, setAttributes, className } = props
+		let cls = ( codeLanguage ) ? `language-${ codeLanguage } ` : ''
+		cls = ( className ) ? cls + className : cls
 		const onChangeContent = ( newContent ) => {
-			setAttributes( { content: newContent } );
-		};
+			setAttributes( { content: newContent } )
+		}
 
 		function onCodeBackgroundColorChange( newColor ) {
-			setAttributes( { codeBackgroundColor: newColor } );
+			setAttributes( { codeBackgroundColor: newColor } )
 		}
 
 		function onCodeLanguageChange( newLanguage ) {
-			setAttributes( { codeLanguage: newLanguage } );
-			formatCode();
+			setAttributes( { codeLanguage: newLanguage } )
+			formatCode()
 		}
 
 		function onOperatingSystemChange( newOperatingSystem ) {
-			setAttributes( { operatingSystem: newOperatingSystem } );
+			setAttributes( { operatingSystem: newOperatingSystem } )
 		}
 
 		function formatCode() {
-			const html = Prism.highlight( content, Prism.languages[ codeLanguage ], codeLanguage );
-			setAttributes( { formattedContent: html } );
-			setAttributes( { isPreview: true } );
-		}
-
-		function toggleLineNumbers() {
-			setAttributes( { lineNumbers: ! lineNumbers } );
+			const html = Prism.highlight( content, Prism.languages[codeLanguage], codeLanguage )
+			setAttributes( { formattedContent: html } )
+			setAttributes( { isPreview: true } )
 		}
 
 		function switchToPreview() {
-			setAttributes( { isPreview: true } );
+			setAttributes( { isPreview: true } )
 		}
 
 		function switchToHTML() {
-			setAttributes( { isPreview: false } );
+			setAttributes( { isPreview: false } )
+		}
+
+		function getOS() {
+			const platform = window.navigator.platform,
+				macosPlatforms = [ 'Macintosh', 'MacIntel', 'MacPPC', 'Mac68K' ],
+				windowsPlatforms = [ 'Win32', 'Win64', 'Windows', 'WinCE' ]
+
+			if (macosPlatforms.indexOf( platform ) !== -1) {
+				setAttributes( { operatingSystem: 'macos' } )
+			} else if (windowsPlatforms.indexOf( platform ) !== -1) {
+				setAttributes( { operatingSystem: 'windows10' } )
+			} else {
+				setAttributes( { operatingSystem: 'macos' } )
+			}
 		}
 
 		return (
@@ -153,7 +156,7 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 				<InspectorControls style={ { marginBottom: '40px' } }>
 					<PanelBody title={ 'Code Background Color' }>
 						<p>Select a background color:</p>
-						<ColorPalette value={ codeBackgroundColor } onChange={ onCodeBackgroundColorChange } />
+						<ColorPalette value={ codeBackgroundColor } onChange={ onCodeBackgroundColorChange }/>
 
 					</PanelBody>
 					<PanelBody title={ 'Language' }>
@@ -175,17 +178,9 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 							value={ operatingSystem }
 							onChange={ onOperatingSystemChange }
 							options={ [
-								{ value: 'userDecided', label: 'User\'s System' },
 								{ value: 'none', label: 'No toolbar' },
 								{ value: 'macos', label: 'MacOS' },
 								{ value: 'windows10', label: 'Windows 10' } ] }
-						/>
-					</PanelBody>
-					<PanelBody title={ lineNumbers ? 'Hiding Line Numbers' : 'Showing Line Numbers' }>
-						<ToggleControl
-							label={ __( 'Show/Hide Line Numbers', 'eom-svg-code-snippets' ) }
-							checked={ ! lineNumbers }
-							onChange={ toggleLineNumbers }
 						/>
 					</PanelBody>
 				</InspectorControls>
@@ -196,7 +191,7 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 							<div className={ `window-container--${ operatingSystem }` }>
 								<Toolbar operatingSystem={ operatingSystem } />
 								<pre className={ `${ cls }` } dangerouslySetInnerHTML={ { __html: formattedContent } }
-									style={ { background: codeBackgroundColor } } />
+										 style={ { background: codeBackgroundColor } } />
 							</div>
 						</div>
 					) : (
@@ -206,11 +201,12 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 							placeholder={ __( 'Write HTML…' ) }
 							aria-label={ __( 'HTML' ) }
 							className={ 'plain-text' }
+							style={ { fontFamily: 'monospace' } }
 						/>
 					) }
 
 			</div>
-		);
+		)
 	},
 
 	/**
@@ -225,19 +221,18 @@ registerBlockType( 'cgb/block-eom-svg-code-snippets', {
 	 * @returns {Mixed} JSX Frontend HTML.
 	 */
 	save: ( props ) => {
-		const { attributes: { content, operatingSystem, formattedContent, lineNumbers, codeLanguage, codeBackgroundColor }, className } = props;
-		let cls = ( codeLanguage ) ? 'language-' + codeLanguage : '';
-		cls = ( className ) ? cls + className : cls;
-		cls = ( ! lineNumbers ) ? cls + ' line-numbers' : cls;
+		const { attributes: { content, operatingSystem, formattedContent, codeLanguage, codeBackgroundColor }, className } = props
+		let cls = ( codeLanguage ) ? 'language-' + codeLanguage : ''
+		cls = ( className ) ? cls + className : cls
 		return (
 			<div className="snippet-container">
 				<div className={ `window-container--${ operatingSystem }` }>
-					<Toolbar operatingSystem={ operatingSystem } />
+					<Toolbar operatingSystem={ operatingSystem }/>
 					<pre className={ cls } content={ content }
-						style={ { background: codeBackgroundColor } }>{ formattedContent }</pre>
+							 style={ { background: codeBackgroundColor } }>{ formattedContent }</pre>
 				</div>
 			</div>
-		);
+		)
 	},
-} );
+} )
 

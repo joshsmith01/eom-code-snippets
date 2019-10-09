@@ -11,10 +11,6 @@ const Toolbar = ( props ) => {
 			return (
 				<CommandPrompt/>
 			)
-		case 'userDecided':
-			return (
-				<div>User Decided</div>
-			)
 		case 'none':
 			return null
 		default:
