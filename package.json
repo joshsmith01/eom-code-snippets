@@ -11,7 +11,7 @@
     "@wordpress/block-editor": "^3.2.0",
     "cgb-scripts": "1.20.0",
     "prism": "^4.1.2",
-    "prismjs": "^1.17.1",
+    "prismjs": "^1.23.0",
     "react-innertext": "^1.1.5"
   }
 }
